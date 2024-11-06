@@ -1,13 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors JavaScript</title>
-    <script src="script.js"></script>
+    <!--<script src="script.js"></script> -->
 </head>
+
 <body>
     <h1>Rock Paper Scissors JavaScript</h1>
-    <p>Press CTRL + SHIFT + J and enter playGame() into console!</p>
+    <h2>Score:</h2>
+    <span>
+        <h3 id="playerScore">Player: </h3>
+        <h3 id="comScore">Computer: </h3>
+    </span>
+    <span id="btnSpan">
+        <button id="rock">ROCK</button>
+        <button id="paper">PAPER</button>
+        <button id="scissors">SCISSORS</button>
+    </span>
+
+    <p id="result">
+    </p>
+
+    <script>
+        const playerScoreText = document.querySelector("playerScore");
+        const comScoreText = document.querySelector("comScore");
+
+        const buttons = document.querySelectorAll("button");
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => {
+                playRound(button.id);
+            });
+        });
+        //Create a rock paper scissors game through console
+
+        //The game will be played against a computer
+        //Write a function that randomly returns rock, paper, or scissors
+        function getComputerChoice() {
+            let choice = Math.floor(1 + Math.random() * 3);
+            switch (choice) {
+                case 1: return "rock";
+                    break;
+                case 2: return "paper";
+                    break;
+                case 3: return "scissors";
+            }
+        }
+
+        //write a function that will get user choice
+        function getHumanChoice(playerChoice) {
+            switch (playerChoice) {
+                case 'rock':
+                case 'paper':
+                case 'scissors':
+                    break;
+                default:
+                    console.log("That is not a valid input! Try again.")
+            }
+            return playerChoice;
+        }
+
+        //declare the players score variables
+
+        let comScore = 0;
+        let playerScore = 0;
+
+        //write the logic to play a single round;
+        function playRound(humanChoice) {
+            let computerChoice = getComputerChoice();
+            //let humanChoice = getHumanChoice().toLowerCase();
+
+            console.log("The Computer chose: " + computerChoice);
+            console.log("The Player chose: " + humanChoice);
+
+            if (humanChoice == computerChoice) {
+                console.log("Tie!");
+            } else if (computerChoice == "rock" && humanChoice == "paper") {
+                playerScore++;
+                console.log("Paper beats Rock!");
+            } else if (computerChoice == "rock" && humanChoice == "scissors") {
+                comScore++;
+                console.log("Rock beats Scissors!");
+            } else if (computerChoice == "paper" && humanChoice == "rock") {
+                comScore++;
+                console.log("Paper beats Rock!");
+            } else if (computerChoice == "paper" && humanChoice == "scissors") {
+                playerScore++;
+                console.log("Scissors beats Paper!");
+            } else if (computerChoice == "scissors" && humanChoice == "paper") {
+                comScore++;
+                console.log("Scissors beats Paper!");
+            }
+            else if (computerChoice == "scissors" && humanChoice == "rock") {
+                playerScore++;
+                console.log("Rock beats Scissors!");
+            }
+
+            let scoreBoard = "Player:" + playerScore + " Computer: " + comScore;
+            console.log(scoreBoard);
+        }
+
+        //write a function that plays 5 rounds of rock paper scissors
+        function playGame() {
+            for (let i = 0; i < 5; i++) {
+                playRound();
+            }
+
+            if (playerScore > comScore) {
+                console.log("Player Wins!");
+            }
+            else if (playerScore === comScore) {
+                console.log("Tie Game");
+            }
+            else {
+                console.log("Computer Wins!");
+            }
+        }
+    </script>
 </body>
+
 </html>
