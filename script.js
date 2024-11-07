@@ -1,91 +1,89 @@
-//Create a rock paper scissors game through console
+const newGameBtn = document.querySelector("#newGame");
+        const playerScoreValue = document.querySelector("#playerScore");
+        const comScoreValue = document.querySelector("#comScore");
+        const gameContainer = document.querySelectorAll(".container");
+        const resultText = document.querySelector("#resultText");
+        let comScore = 0;
+        let playerScore = 0;
+        newGameBtn.addEventListener("click", () => {
+            comScore = 0, playerScore = 0;
+            playerScoreValue.textContent = playerScore;
+            comScoreValue.textContent = comScore;
+            resultText.textContent = '';
+            gameContainer.forEach(container => {
+                container.style.display = "block";
+            });
+        });
 
-//The game will be played against a computer
-//Write a function that randomly returns rock, paper, or scissors
-function getComputerChoice(){
-    let choice = Math.floor(1 + Math.random()*3);
-    switch(choice){
-        case 1: return "rock";
-        break;
-        case 2: return "paper";
-        break;
-        case 3: return "scissors";
-    }
-}
 
-//write a function that will get user choice
-function getHumanChoice(){
-    let isValid = false;
-    let playerChoice;
-
-    while(!isValid){
-        playerChoice = prompt("Enter Rock, Paper, or Scissors").toLowerCase();
-        switch (playerChoice){
-            case 'rock':
-            case 'paper':
-            case 'scissors':
-                isValid = true;
-                break;
-            default:
-                console.log("That is not a valid input! Try again.")
+        function getComputerChoice() {
+            let choice = Math.floor(1 + Math.random() * 3);
+            switch (choice) {
+                case 1: return "rock";
+                    break;
+                case 2: return "paper";
+                    break;
+                case 3: return "scissors";
+            }
         }
-    }
-    return playerChoice;
-}
 
-//declare the players score variables
+        const humanChoiceBtn = document.querySelectorAll(".game.container button");
 
-let comScore = 0;
-let playerScore = 0;
+        humanChoiceBtn.forEach((button) => {
+            button.addEventListener("click", () => {
+                if (playerScore < 5 && comScore < 5) {
+                    playRound(button.id);
+                }
+            })
+        });
 
-//write the logic to play a single round;
-function playRound(){
-    let computerChoice = getComputerChoice();
-    let humanChoice = getHumanChoice().toLowerCase();
+        function playRound(humanChoice) {
+            let computerChoice = getComputerChoice();
 
-    console.log("The Computer chose: " + computerChoice);
-    console.log("The Player chose: " + humanChoice);
+            if (humanChoice == computerChoice) {
+                resultText.textContent = "Tie!";
+            } else if (computerChoice == "rock" && humanChoice == "paper") {
+                playerScore++;
+                resultText.textContent = "Player's paper beats Computer's rock";
+            } else if (computerChoice == "rock" && humanChoice == "scissors") {
+                comScore++;
+                resultText.textContent = "Computer's rock beats Player's scissors";
+            } else if (computerChoice == "paper" && humanChoice == "rock") {
+                comScore++;
+                resultText.textContent = "Computer's paper beats Player's rock";
+            } else if (computerChoice == "paper" && humanChoice == "scissors") {
+                playerScore++;
+                resultText.textContent = "Player's scissor beats Computer's paper";
+            } else if (computerChoice == "scissors" && humanChoice == "paper") {
+                comScore++;
+                resultText.textContent = "Computer's scissors beats Player's paper";
+            }
+            else if (computerChoice == "scissors" && humanChoice == "rock") {
+                playerScore++;
+                resultText.textContent = "Players's rock beats Computer's scissors";
+            }
 
-    if (humanChoice == computerChoice){
-        console.log("Tie!");
-    }else if (computerChoice == "rock" && humanChoice == "paper"){
-        playerScore++;
-        console.log("Paper beats Rock!");
-    }else if (computerChoice == "rock" && humanChoice == "scissors"){
-        comScore++;
-        console.log("Rock beats Scissors!");
-    }else if (computerChoice == "paper" && humanChoice == "rock"){
-        comScore++;
-        console.log("Paper beats Rock!");
-    }else if (computerChoice == "paper" && humanChoice == "scissors"){
-        playerScore++;
-        console.log("Scissors beats Paper!");
-    }else if (computerChoice == "scissors" && humanChoice == "paper"){
-        comScore++;
-        console.log("Scissors beats Paper!");
-    }
-    else if (computerChoice == "scissors" && humanChoice == "rock"){
-        playerScore++;
-        console.log("Rock beats Scissors!");
-    }
+            playerScoreValue.textContent = playerScore;
+            comScoreValue.textContent = comScore;
 
-    let scoreBoard = "Player:" + playerScore + " Computer: " + comScore;
-    console.log(scoreBoard);
-}
 
-//write a function that plays 5 rounds of rock paper scissors
-function playGame(){
-    for (let i = 0; i < 5; i++){
-        playRound();
-    }
+            if (playerScore === 5 || comScore === 5) {
+                endGame();
+            } else {
+                setTimeout(() => {
+                    resultText.textContent = "Make your next move!";
+                }, 1000);
+            }
 
-    if(playerScore > comScore){
-        console.log("Player Wins!");
-    }
-    else if(playerScore === comScore){
-        console.log("Tie Game");
-    }
-    else{
-        console.log("Computer Wins!");
-    }
-}
+        }
+
+        function endGame() {
+            if (playerScore > comScore) {
+                resultText.textContent = "Congratulations Player wins the game.";
+            } else {
+                resultText.textContent = "Computer wins!, Better luck next time.";
+            }
+            setTimeout(() => {
+                resultText.textContent = "Press New Game to play again!";
+            }, 1000);
+        }
